@@ -8,13 +8,14 @@ terraform {
 }
 
 provider "google" {
-  project = "my-project-id"
+  credentials = file(var.credentials) #path to the credentials file
+  project = var.project  #project name goes here (service)
   region  = "eu-central"
 }
 
 resource "google_storage_bucket" "demo-bucket" {
-  name          = "terraform-demo-bucket"
-  location      = "US"
+  name          = var.gcs_bucket_name #name of the bucket you want to create
+  location      = var.location #location of the bucket you want to create
   force_destroy = true
 
   lifecycle_rule {
@@ -27,3 +28,6 @@ resource "google_storage_bucket" "demo-bucket" {
   }
 }
 
+resource "google_bigquery_dataset" "demo-dataset" {
+  dataset_id                  = var.bq_dataset_name #put the name of the dataset you want to create
+}
